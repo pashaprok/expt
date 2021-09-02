@@ -4,10 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const body_parser_1 = __importDefault(require("body-parser"));
 const postRoutes_1 = __importDefault(require("./routes/postRoutes"));
 const app = (0, express_1.default)();
-app.use(body_parser_1.default.json());
+app.use(express_1.default.json());
 app.use('/api/posts', postRoutes_1.default);
 app.use('/', (req, res) => {
     res.send('hello, world!');

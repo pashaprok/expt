@@ -1,9 +1,13 @@
 require('dotenv').config({ path: `${__dirname}/config.env` });
+import 'reflect-metadata'
+import { createConnection } from 'typeorm'
 
 import app from './app'
 
-const PORT = process.env.PORT || 3000;
+const PORT: number = +process.env.PORT || 3000;
 
-app.listen(PORT, () => {
-    console.log(`app running on port ${PORT}...`);
-});
+createConnection().then(() => {
+    app.listen(PORT, () => {
+        console.log(`app running on port ${PORT}...`);
+    });
+}).catch(error => console.log(error));
