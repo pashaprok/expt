@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import { User } from '../entities/User'
 import {
-    createUser,
     getUser,
     getUsers,
     updateUser,
@@ -12,34 +11,22 @@ import { getUserPosts } from '../repositories/post'
 
 export async function getAllUsers(req: Request, res: Response) {
     const result: User[] = await getUsers();
-    // result.map(async function(user: User) {
-    //     user.posts = await getUserPosts(user.id)
-    // })
-
     for (let i=0; i<result.length; i++) {
         result[i].posts = await getUserPosts(result[i].id)
     }
 
     return res.status(200).json({
         status: 'success',
+        amountOfUsers: result.length,
         data: result,
-    })
-}
-
-export async function addUser(req: Request, res: Response) {
-    const newUser: User = req.body;
-    newUser.posts = []
-    const response: User = await createUser(newUser);
-    return res.status(200).json({
-        status: 'success',
-        data: response,
     })
 }
 
 export async function getUserController(req: Request, res: Response) {
     const result: User = await getUser(+req.params.id);
-    if (!result) res.status(404).send({ message: "No post found" });
+    if (!result) res.status(404).send({ message: "No user found" });
     result.posts = await getUserPosts(+req.params.id);
+    console.log(result.posts)
     return res.status(200).json({
         status: 'success',
         data: result,
@@ -48,7 +35,7 @@ export async function getUserController(req: Request, res: Response) {
 
 export async function updateUserController(req: Request, res: Response) {
     const result: User = await updateUser(+req.params.id, req.body);
-    if (!result) res.status(404).send({ message: "No post found" });
+    if (!result) res.status(404).send({ message: "No user found" });
     return res.status(200).json({
         status: 'success',
         data: result,

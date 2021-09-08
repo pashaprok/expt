@@ -1,5 +1,3 @@
-require('dotenv').config({ path: `${__dirname}/config.env` });
-
 const dbConfig = {
     type: "postgres",
     host: process.env.DBHOST,
@@ -9,17 +7,23 @@ const dbConfig = {
     database: process.env.DBNAME,
     synchronize: false,
     logging: false,
+    seeds: [
+        'seeds/**/*{.ts,.js}'
+    ],
+    factories: [
+        'factories/**/*{.ts,.js}'
+    ],
     entities: [
-        "entities/**/*.ts"
+        "entities/**/*{.ts,.js}"
     ],
     migrations: [
-        "migration/**/*.ts"
+        "migration/**/*{.ts,.js}"
     ],
     subscribers: [
-        "subscriber/**/*.ts"
+        "subscriber/**/*{.ts,.js}"
     ],
     cli: {
-    entitiesDir: "entities",
+        entitiesDir: "entities",
         migrationsDir: "migration",
         subscribersDir: "subscriber"
     }

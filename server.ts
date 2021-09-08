@@ -1,13 +1,12 @@
-require('dotenv').config({ path: `${__dirname}/config.env` });
 import 'reflect-metadata'
+import 'express-async-errors'
 import { createConnection } from 'typeorm'
+import { appConfig } from './config/app'
 
 import app from './app'
 
-const PORT: number = +process.env.PORT || 3000;
-
 createConnection().then(() => {
-    app.listen(PORT, () => {
-        console.log(`app running on port ${PORT}...`);
+    app.listen(appConfig.port, () => {
+        console.log(`app running on port ${appConfig.port}...`);
     });
 }).catch(error => console.log(error));

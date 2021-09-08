@@ -33,5 +33,5 @@ export class Post {
 
     @ManyToOne(() => User, user => user.posts)
     @JoinColumn({name: 'userID', referencedColumnName: 'id'})
-    userID: User;
+    userID: number;
 }

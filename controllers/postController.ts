@@ -5,8 +5,10 @@ import {
     getPost,
     getPosts,
     updatePost,
-    deletePost,
+    deletePost, getUserPosts,
 } from '../repositories/post'
+import { Forbidden } from "http-errors";
+import { checkBelongs } from "../utils/checkBelongs";
 
 export async function getAllPosts(req: Request, res: Response) {
     const result: Post[] = await getPosts();
@@ -16,11 +18,10 @@ export async function getAllPosts(req: Request, res: Response) {
     })
 }
 
-
-
 export async function addPost(req: Request, res: Response) {
-    const newPost: Post = req.body;
+    const newPost: Partial<Post> = req.body;
     newPost.posted = new Date()
+    newPost.userID = +req.user.id
     const response: Post = await createPost(newPost);
 
     return res.status(200).json({
@@ -39,17 +40,33 @@ export async function getPostController(req: Request, res: Response) {
 }
 
 export async function updatePostController(req: Request, res: Response) {
-    const result: Post = await updatePost(+req.params.id, req.body);
-    if (!result) res.status(404).send({ message: "No post found" });
-    return res.status(200).json({
-        status: 'success',
-        data: result,
-    });
+    const post: Post = await getPost(+req.params.id)
+    const userPosts: Post[] = await getUserPosts(req.user.id)
+    const check: boolean = checkBelongs(userPosts, post.id)
+
+    if(check) {
+        const result: Post = await updatePost(+req.params.id, req.body);
+        if (!result) res.status(404).send({ message: "No post found" });
+        return res.status(200).json({
+            status: 'success',
+            data: result,
+        });
+    } else {
+        throw new Forbidden('Only the author can edit the post')
+    }
 }
 
 export async function deletePostController(req: Request, res: Response) {
-    await deletePost(+req.params.id);
-    return res.status(200).json({
-        status: 'success'
-    });
+    const post: Post = await getPost(+req.params.id)
+    const userPosts: Post[] = await getUserPosts(req.user.id)
+    const check: boolean = checkBelongs(userPosts, post.id)
+
+    if(check) {
+        await deletePost(+req.params.id);
+        return res.status(200).json({
+            status: 'success'
+        });
+    } else {
+        throw new Forbidden('Only the author can delete the post')
+    }
 }

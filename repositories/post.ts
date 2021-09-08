@@ -1,13 +1,14 @@
 import { getRepository, Repository } from 'typeorm'
 import { Post } from '../entities/Post'
-import { validate } from 'class-validator'
 
 export const getPosts = async (): Promise<Array<Post>> => {
     const postRepository: Repository<Post> = getRepository(Post);
-    return postRepository.find();
+    return postRepository.find({
+        relations: ['userID']
+    });
 };
 
-export const createPost = async (payload: Post): Promise<Post> => {
+export const createPost = async (payload: Partial<Post>): Promise<Post> => {
     const postRepository: Repository<Post> = getRepository(Post);
     const post: Post = new Post();
     return postRepository.save({
@@ -16,11 +17,14 @@ export const createPost = async (payload: Post): Promise<Post> => {
     });
 };
 
-export const getPost = async (id: number): Promise<Post | null> => {
+export const getPost = async (id: number): Promise<Post> => {
     const postRepository: Repository<Post> = getRepository(Post);
-    const post = await postRepository.findOne({ id: id });
-    if (!post) return null;
-    return post;
+    return await postRepository.findOne({
+        where: {
+            id
+        },
+        relations: ['userID']
+    });
 };
 
 export const getUserPosts = async (id: number): Promise<Array<Post>> => {

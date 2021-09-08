@@ -6,18 +6,19 @@ import {
     getPostController,
     updatePostController
 } from '../controllers/postController'
+import passport from "../controllers/authController";
 
 const router: Router = Router();
 
 router
     .route('/')
     .get(getAllPosts)
-    .post(addPost)
+    .post(passport.authenticate('jwt'), addPost)
 
 router
     .route('/:id')
     .get(getPostController)
-    .patch(updatePostController)
-    .delete(deletePostController)
+    .patch(passport.authenticate('jwt'), updatePostController)
+    .delete(passport.authenticate('jwt'), deletePostController)
 
 export default router;

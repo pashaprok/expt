@@ -14,7 +14,7 @@ export class newtables1630565669582 implements MigrationInterface {
                 {
                     name: "name",
                     type: "varchar",
-                    isNullable: false,
+                    isNullable: true,
                     length: "255",
                 },
                 {
