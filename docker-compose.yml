@@ -3,8 +3,8 @@
 version: "3"
 services:
   app:
-    build: ./expt
-    container_name: expt_node
+    build: ./exptnode
+    container_name: exptnode
     hostname: exptnode
     depends_on:
       - postgres
@@ -12,7 +12,7 @@ services:
       - "3030:3030"
   postgres:
     image: postgres:13
-    container_name: expt_db
+    container_name: exptdb
     volumes:
       - pgdata:/var/lib/postgresql/data
     environment:
@@ -23,9 +23,9 @@ services:
       - "5432:5432"
   nginx:
     image: nginx:latest
-    container_name: expt_nginx
+    container_name: exptnginx
     hostname: expt
-    build: ./exptng
+    build: ./exptnginx
     ports:
       - "80:80"
 volumes:
