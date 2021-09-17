@@ -1,4 +1,6 @@
-node_modules
-.env
-dist
 .idea
+exptnode/.env
+exptnode/node_modules
+exptnode/.idea
+exptnode/npm-debug.log
+exptnginx/.idea
