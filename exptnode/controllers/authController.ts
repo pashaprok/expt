@@ -33,7 +33,6 @@ export async function registerUser(req: Request, res: Response) {
     }
 
     // validate
-
     const response: User = await createUser(newUser);
 
     const token = createToken(response)

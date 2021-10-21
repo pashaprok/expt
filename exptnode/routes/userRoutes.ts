@@ -9,12 +9,13 @@ import {
     loginUser,
     registerUser
 } from '../controllers/authController'
+import { verifyCognitoToken } from "../controllers/cognitoController";
 
 const router: Router = Router();
 
 router
     .route('/')
-    .get(getAllUsers)
+    .get(verifyCognitoToken, getAllUsers)
 
 router
     .route('/:id')

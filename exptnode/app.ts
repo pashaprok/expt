@@ -5,12 +5,14 @@ import passport from "passport";
 import { HttpError } from "http-errors";
 import cityRoutes from "./routes/cityRoutes";
 import { getWeather } from "./controllers/weatherController";
+import cognitoRouter from "./routes/cognitoRoutes";
 
 const app: Application = express();
 app.use(express.json());
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use('/api/auth/cognito', cognitoRouter);
 app.use('/api/posts', postRouter);
 app.use('/api/users', userRouter);
 app.use('/api/cities', cityRoutes);
